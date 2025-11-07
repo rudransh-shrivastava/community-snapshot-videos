@@ -1,0 +1,28 @@
+services:
+  hackathon-app:
+    container_name: hackathon-app
+    command: >
+      sh -c '
+        pnpm run dev
+      '
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.local
+    environment:
+      - NEXT_TELEMETRY_DISABLED=1
+      - NODE_ENV=development
+    networks:
+      - hackathon-app-network
+    ports:
+      - 3000:3000
+    volumes:
+      - ..:/home/hackathon-app
+      - hackathon-app-next:/home/hackathon-app/.next
+      - hackathon-app-node-modules:/home/hackathon-app/node_modules
+
+networks:
+  hackathon-app-network:
+
+volumes:
+  hackathon-app-next:
+  hackathon-app-node-modules:
