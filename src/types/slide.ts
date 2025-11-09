@@ -38,4 +38,4 @@ interface BlankSlide extends BaseSlide {
 }
 
 // Union type for all slides
-type Slide = IntroSlide | BlankSlide
+export type Slide = IntroSlide | BlankSlide
