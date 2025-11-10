@@ -5,8 +5,10 @@
   "scripts": {
     "build": "next build --turbopack",
     "dev": "next dev --turbopack -p ${APP_PORT:-3000}",
-    "format": "prettier --write .",
-    "lint": "eslint",
+    "format": "prettier --log-level warn --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . --fix --max-warnings=0",
+    "lint:check": "eslint . --max-warnings=0",
     "prepare": "husky",
     "start": "next start"
   },
