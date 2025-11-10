@@ -54,6 +54,9 @@ run:
 	docker compose -f docker-compose/local.yaml --project-name hackathon-app-local build && \
 	docker compose -f docker-compose/local.yaml --project-name hackathon-app-local up --remove-orphans
 
+run-no-conflict:
+	@APP_PORT=8765 $(MAKE) run
+
 shell:
 	@CMD="/bin/sh" $(MAKE) exec-command-it
 

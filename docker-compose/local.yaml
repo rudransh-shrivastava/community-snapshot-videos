@@ -9,12 +9,13 @@ services:
       context: ../
       dockerfile: docker/Dockerfile.local
     environment:
+      - APP_PORT=${APP_PORT:-3000}
       - NEXT_TELEMETRY_DISABLED=1
       - NODE_ENV=development
     networks:
       - hackathon-app-network
     ports:
-      - 3000:3000
+      - ${APP_PORT:-3000}:${APP_PORT:-3000}
     volumes:
       - ..:/home/hackathon-app
       - hackathon-app-next:/home/hackathon-app/.next
