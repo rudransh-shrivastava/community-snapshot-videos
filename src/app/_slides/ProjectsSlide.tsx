@@ -1,12 +1,9 @@
+import { PaginatedResponse, Project } from '@/types/api'
 import { SlideComponentProps } from '@/types/slide'
 
-interface Project {
-  name: string
-  description: string
-}
-
 export function ProjectsSlide({ slide, data }: SlideComponentProps) {
-  const projects = Array.isArray(data) ? (data as Project[]) : []
+  const paginatedProjects = data as PaginatedResponse<Project> | undefined
+  const projects = paginatedProjects?.items || []
 
   return (
     <div className="flex h-full flex-col items-center justify-center p-12 text-center">
@@ -16,7 +13,7 @@ export function ProjectsSlide({ slide, data }: SlideComponentProps) {
           projects.map((project) => (
             <div key={project.name}>
               <h2 className="text-2xl font-bold">{project.name}</h2>
-              <p>{project.description}</p>
+              <p>{project.key}</p>
             </div>
           ))
         ) : (

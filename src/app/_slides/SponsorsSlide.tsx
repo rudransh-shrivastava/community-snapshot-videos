@@ -1,13 +1,10 @@
+import { PaginatedResponse, Sponsor } from '@/types/api'
 import { SlideComponentProps } from '@/types/slide'
 import Image from 'next/image'
 
-interface Sponsor {
-  name: string
-  logoUrl: string
-}
-
 export function SponsorsSlide({ slide, data }: SlideComponentProps) {
-  const sponsors = Array.isArray(data) ? (data as Sponsor[]) : []
+  const paginatedSponsors = data as PaginatedResponse<Sponsor> | undefined
+  const sponsors = paginatedSponsors?.items || []
 
   return (
     <div className="flex h-full flex-col items-center justify-center p-12 text-center">
@@ -16,7 +13,7 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
         {sponsors.length > 0 ? (
           sponsors.map((sponsor) => (
             <div key={sponsor.name}>
-              <Image src={sponsor.logoUrl} alt={sponsor.name} width={80} height={80} />
+              <Image src={sponsor.image_url} alt={sponsor.name} width={80} height={80} />
             </div>
           ))
         ) : (
