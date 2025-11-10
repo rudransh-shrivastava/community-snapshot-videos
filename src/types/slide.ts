@@ -1,41 +1,19 @@
-// Base slide interface
-interface BaseSlide {
+export interface Slide {
   id: string
-  type: SlideType
+  type: string
+  title: string
+  endpoint: string
   script: string
-  customization: SlideCustomization
+  customization: {
+    bgColor?: string
+    textColor?: string
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any
 }
 
-// Slide types
-type SlideType = 'intro' | 'blank'
-
-// Common customization options
-interface SlideCustomization {
-  bgColor?: string
-  textColor?: string
+export interface SlideComponentProps {
+  slide: Slide
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any
 }
-
-// Specific slide data types
-interface IntroSlideData {
-  month: string
-  year: number
-  subtitle: string
-}
-
-// Typed slide variants
-interface IntroSlide extends BaseSlide {
-  type: 'intro'
-  data: IntroSlideData
-}
-
-interface BlankSlideData {
-  message: 'blank'
-}
-
-interface BlankSlide extends BaseSlide {
-  type: 'blank'
-  data: BlankSlideData
-}
-
-// Union type for all slides
-export type Slide = IntroSlide | BlankSlide
