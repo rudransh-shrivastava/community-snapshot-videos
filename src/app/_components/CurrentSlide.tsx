@@ -1,5 +1,6 @@
 import { slideRegistry } from '@/config/slides'
 import type { Slide } from '@/types/slide'
+import { useEffect, useRef, useState } from 'react'
 
 export function CurrentSlide({
   currentSlide,
@@ -9,6 +10,24 @@ export function CurrentSlide({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetchedData: any
 }) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(0)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const updateScale = () => {
+      const { width, height } = container.getBoundingClientRect()
+      setScale(Math.min(width / 1920, height / 1080))
+    }
+
+    updateScale()
+    const observer = new ResizeObserver(updateScale)
+    observer.observe(container)
+    return () => observer.disconnect()
+  }, [])
+
   const renderContent = () => {
     if (!currentSlide) {
       return <div className="flex h-full w-full items-center justify-center">No Slide Selected</div>
@@ -36,8 +55,16 @@ export function CurrentSlide({
   }
 
   return (
-    <div className="dark:bg-background bg-secondary flex items-center p-8">
-      <div className="aspect-video w-full border bg-white text-black">{renderContent()}</div>
+    <div
+      className="dark:bg-background bg-secondary mx-2 ml-4 flex items-center justify-center p-8"
+      ref={containerRef}
+    >
+      <div
+        className="absolute aspect-video h-[1080px] border bg-white text-black"
+        style={{ transform: `scale(${scale})` }}
+      >
+        {renderContent()}
+      </div>
     </div>
   )
 }
