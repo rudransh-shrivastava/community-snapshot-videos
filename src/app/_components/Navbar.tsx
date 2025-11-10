@@ -10,7 +10,8 @@ export function Navbar() {
         size="icon"
         className="flex items-center justify-center rounded-full p-0"
         onClick={() => {
-          document.body.classList.toggle('dark')
+          const isDark = document.documentElement.classList.toggle('dark')
+          localStorage.setItem('theme', isDark ? 'dark' : 'light')
         }}
       >
         <SunIcon />

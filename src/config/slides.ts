@@ -20,7 +20,7 @@ export const slideConfigurations: Partial<Slide>[] = [
     id: 'projects-slide',
     type: 'projects',
     title: 'New Projects',
-    endpoint: '/api/v0/projects',
+    endpoint: '/api/v0/snapshots/2025-02/projects',
     script: 'Here are some of the new projects from our community.',
   },
 ]
