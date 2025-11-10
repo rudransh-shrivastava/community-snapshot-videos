@@ -8,14 +8,14 @@ export function SideBarScript({
   currentSlide,
   setCurrentSlide,
   fetchedData,
-  setFetchedData,
+  setFetchedDataCache,
 }: {
   currentSlide: Slide | null
   setCurrentSlide: Dispatch<SetStateAction<Slide | null>>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetchedData: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFetchedData: Dispatch<any>
+  setFetchedDataCache: Dispatch<SetStateAction<Record<string, any>>>
 }) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -28,7 +28,9 @@ export function SideBarScript({
 
     setIsLoading(true)
     setError(null)
-    setFetchedData(null)
+
+    // Clear the cache for the current slide before fetching
+    setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: null }))
 
     const url = `${process.env.NEXT_PUBLIC_OWASP_NEST_API_URL}${currentSlide.endpoint}`
 
@@ -38,7 +40,7 @@ export function SideBarScript({
         throw new Error(`Failed to fetch data from ${url}`)
       }
       const data = await response.json()
-      setFetchedData(data)
+      setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: data }))
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)
@@ -52,6 +54,22 @@ export function SideBarScript({
 
   return (
     <div className="flex flex-col gap-4 p-2">
+      <div className="dark:bg-secondary/30 rounded-md border p-4">
+        <Button
+          onClick={handleFetchData}
+          disabled={isLoading || !currentSlide || !currentSlide.endpoint}
+        >
+          {isLoading ? 'Loading...' : 'Fetch Data'}
+        </Button>
+        {error && <p className="text-red-500">{error}</p>}
+        <div className="mt-4 h-[50vh] overflow-auto rounded-md bg-gray-100 p-2 dark:bg-gray-800">
+          {fetchedData && (
+            <pre className="text-sm break-words whitespace-pre-wrap">
+              {JSON.stringify(fetchedData, null, 2)}
+            </pre>
+          )}
+        </div>
+      </div>
       <Textarea
         placeholder="Type your Transcript here."
         value={currentSlide?.script}
@@ -64,18 +82,6 @@ export function SideBarScript({
         <Button className="cursor-pointer rounded-full p-0" size="icon">
           <Play />
         </Button>
-      </div>
-      <div className="dark:bg-secondary/30 rounded-md border p-4">
-        <Button
-          onClick={handleFetchData}
-          disabled={isLoading || !currentSlide || !currentSlide.endpoint}
-        >
-          {isLoading ? 'Loading...' : 'Fetch Data'}
-        </Button>
-        {error && <p className="text-red-500">{error}</p>}
-        {fetchedData && (
-          <pre className="mt-4 whitespace-pre-wrap">{JSON.stringify(fetchedData, null, 2)}</pre>
-        )}
       </div>
     </div>
   )
