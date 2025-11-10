@@ -4,7 +4,7 @@ import { SunIcon } from 'lucide-react'
 export function Navbar() {
   return (
     <div className="col-span-3 flex items-center justify-between border-b px-4">
-      <div>owasp nest api hackathon</div>
+      <div>OWASP Nest API Hackathon</div>
       <Button
         variant="secondary"
         size="icon"

@@ -37,7 +37,7 @@ export function CurrentSlide({
 
   return (
     <div className="dark:bg-background bg-secondary flex items-center p-8">
-      <div className="bg-background aspect-video w-full border">{renderContent()}</div>
+      <div className="aspect-video w-full border bg-white text-black">{renderContent()}</div>
     </div>
   )
 }
