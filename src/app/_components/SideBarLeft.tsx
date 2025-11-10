@@ -26,7 +26,9 @@ export function SideBarLeft({
           <div className="px-2">
             <span>{index + 1}</span>
           </div>
-          <div className="aspect-video w-full border bg-white text-black">{slide.id}</div>
+          <div className="flex aspect-video w-full items-center justify-center border bg-white p-2">
+            <span className="text-xs text-gray-500">{slide.id}</span>
+          </div>
         </div>
       ))}
     </div>
