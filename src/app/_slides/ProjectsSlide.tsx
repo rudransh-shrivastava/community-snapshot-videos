@@ -22,8 +22,8 @@ export function ProjectsSlide({ slide, data }: SlideComponentProps) {
   const temp = { stars: 4430000, forks: 12, issues: 13, repositories: 2, contributors: 92, maintainers: ['Me', 'Him'] }
 
   return (
-    <div className="flex h-full flex-col items-center p-8 text-center">
-      <h1 className="mb-4 text-6xl font-bold">{slide.title}</h1>
+    <div className="flex h-full flex-col items-center p-12 text-center">
+      <h1 className="mb-12 text-6xl font-bold">{slide.title}</h1>
       <div className="grid grid-cols-4 gap-4">
         {projects.length > 0 ? (
           projects.map((project) => (

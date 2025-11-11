@@ -7,8 +7,8 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
   const sponsors = paginatedSponsors?.items || []
 
   return (
-    <div className="flex h-full flex-col items-center justify-center p-12 text-center">
-      <h1 className="mb-8 text-5xl font-bold">{slide.title}</h1>
+    <div className="flex h-full flex-col items-center justify-center gap-24 p-12 text-center">
+      <h1 className="text-5xl font-bold">{slide.title}</h1>
       <div className="flex flex-wrap items-center justify-center gap-12">
         {sponsors.length > 0 ? (
           sponsors.map((sponsor) => (

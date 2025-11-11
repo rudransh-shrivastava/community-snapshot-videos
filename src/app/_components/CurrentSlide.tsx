@@ -60,8 +60,8 @@ export function CurrentSlide({
       ref={containerRef}
     >
       <div
-        className="absolute aspect-video h-[1080px] border bg-white text-black"
-        style={{ transform: `scale(${scale})` }}
+        className="absolute aspect-video h-[1080px] border bg-white text-black transition-all"
+        style={{ transform: `scale(${scale})`, opacity: scale === 0 ? 0 : 1 }}
       >
         {renderContent()}
       </div>
