@@ -1,14 +1,24 @@
+import { IntroSlide } from '@/app/_slides/IntroSlide'
+import { OutroSlide } from '@/app/_slides/OutroSlide'
 import { ProjectsSlide } from '@/app/_slides/ProjectsSlide'
 import { SponsorsSlide } from '@/app/_slides/SponsorsSlide'
 import { Slide, SlideComponentProps } from '@/types/slide'
 import { ComponentType } from 'react'
 
 export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> = {
+  intro: IntroSlide,
   sponsors: SponsorsSlide,
   projects: ProjectsSlide,
+  outro: OutroSlide,
 }
 
 export const slideConfigurations: Partial<Slide>[] = [
+  {
+    id: 'intro-slide',
+    type: 'intro',
+    title: 'Welcome',
+    script: 'Welcome to our presentation.',
+  },
   {
     id: 'sponsors-slide',
     type: 'sponsors',
@@ -22,5 +32,11 @@ export const slideConfigurations: Partial<Slide>[] = [
     title: 'New Projects',
     endpoint: '/api/v0/snapshots/2025-02/projects',
     script: 'Here are some of the new projects from our community.',
+  },
+  {
+    id: 'outro-slide',
+    type: 'outro',
+    title: 'Thank You',
+    script: 'Thank you for your attention.',
   },
 ]
