@@ -31,7 +31,8 @@ export function NewChaptersSlide({ data }: SlideComponentProps) {
     const mercMin = Math.log(Math.tan(Math.PI / 4 + minLatRad / 2))
     const mercN = Math.log(Math.tan(Math.PI / 4 + latRad / 2))
 
-    const xPercent = ((lon + 180) / 360) * 100
+    // 4 deg adjustment
+    const xPercent = ((lon + 180) / (360 + 4)) * 100
     const yPercent = ((mercMax - mercN) / (mercMax - mercMin)) * 100
 
     return {
