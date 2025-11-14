@@ -35,6 +35,15 @@ export const slideConfigurations: Partial<Slide>[] = [
     endpoint: '/api/v0/snapshots/2025-02/projects/',
     detailEndpointPattern: '/api/v0/projects/{key}',
     script: 'Here are some of the new projects from our community.',
+    scriptGenerationPrompt: `
+      You are a scriptwriter for a tech presentation.
+      Your task is to generate a script for a presentation slide.
+      The script should be simple and direct.
+      Based on the data provided, state the name of the project and its leaders.
+      Do not add any extra words, introduction or conclusion.
+      For example, if the data is about a project named "OWASP Top 10" with leaders "John Doe" and "Jane Doe", the script should be something like: "OWASP Top 10, led by John Doe and Jane Doe."
+      Start the presentation with the text: "Here are some of the new projects from our community."
+    `,
   },
   {
     id: 'new-chapters-slide',
