@@ -4,6 +4,7 @@ import { OutroSlide } from '@/app/_slides/OutroSlide'
 import { ProjectsSlide } from '@/app/_slides/ProjectsSlide'
 import { ReleasesSlide } from '@/app/_slides/ReleasesSlide'
 import { SponsorsSlide } from '@/app/_slides/SponsorsSlide'
+import { NewContributorsSlide } from '@/app/_slides/NewContributorsSlide'
 import { Slide, SlideComponentProps } from '@/types/slide'
 import { ComponentType } from 'react'
 
@@ -13,6 +14,7 @@ export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> =
   projects: ProjectsSlide,
   newChapters: NewChaptersSlide,
   releases: ReleasesSlide,
+  newContributors: NewContributorsSlide,
   outro: OutroSlide,
 }
 
@@ -58,6 +60,12 @@ export const slideConfigurations: Partial<Slide>[] = [
     type: 'releases',
     title: 'Releases',
     script: 'Here are the latest releases from our community.',
+  },
+  {
+    id: 'new-contributors-slide',
+    type: 'newContributors',
+    title: 'New Contributors',
+    script: 'Let\'s welcome our new contributors!',
   },
   {
     id: 'outro-slide',
