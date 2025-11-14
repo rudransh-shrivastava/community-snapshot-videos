@@ -18,10 +18,7 @@ clean-dependencies:
 	@rm -rf node_modules
 
 clean-docker:
-	@docker container rm -f hackathon-app >/dev/null 2>&1 || true
-	@docker image rm -f hackathon-app-local >/dev/null 2>&1 || true
-	@docker volume rm -f hackathon-app-local-next >/dev/null 2>&1 || true
-	@docker volume rm -f hackathon-app-local-node-modules >/dev/null 2>&1 || true
+	@docker compose -f docker-compose/local.yaml --project-name hackathon-app-local down --volumes --rmi local
 
 exec-command:
 	@docker exec -t hackathon-app $(CMD)
