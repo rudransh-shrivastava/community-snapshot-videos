@@ -17,7 +17,8 @@ export function SideBarScript({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setFetchedDataCache: Dispatch<SetStateAction<Record<string, any>>>
 }) {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isFetchingData, setIsFetchingData] = useState(false)
+  const [isGeneratingScript, setIsGeneratingScript] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const handleFetchData = async () => {
@@ -26,7 +27,7 @@ export function SideBarScript({
       return
     }
 
-    setIsLoading(true)
+    setIsFetchingData(true)
     setError(null)
 
     // Clear the cache for the current slide before fetching
@@ -48,20 +49,66 @@ export function SideBarScript({
         setError('An unknown error occurred')
       }
     } finally {
-      setIsLoading(false)
+      setIsFetchingData(false)
+    }
+  }
+
+  const handleGenerateScript = async () => {
+    if (!currentSlide) {
+      setError('No slide selected.')
+      return
+    }
+    if (!fetchedData) {
+      setError('No data fetched. Please use Fetch Data Button')
+      return
+    }
+
+    setIsGeneratingScript(true)
+    setError(null)
+
+    try {
+      const response = await fetch('/api/generate-script', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          slide: { ...currentSlide, data: fetchedData },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate script')
+      }
+
+      const { script } = await response.json()
+      setCurrentSlide((prev) => (prev ? { ...prev, script } : prev))
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError('An unknown error occurred')
+      }
+    } finally {
+      setIsGeneratingScript(false)
     }
   }
 
   return (
     <div className="flex flex-col gap-4 p-2">
       <div className="dark:bg-secondary/30 rounded-md border p-4">
-        <Button
-          onClick={handleFetchData}
-          disabled={isLoading || !currentSlide || !currentSlide.endpoint}
-        >
-          {isLoading ? 'Loading...' : 'Fetch Data'}
-        </Button>
-        {error && <p className="text-red-500">{error}</p>}
+        <div className="flex gap-2">
+          <Button
+            onClick={handleFetchData}
+            disabled={isFetchingData || !currentSlide || !currentSlide.endpoint}
+          >
+            {isFetchingData ? 'Loading...' : 'Fetch Data'}
+          </Button>
+          <Button onClick={handleGenerateScript} disabled={isGeneratingScript || !currentSlide}>
+            {isGeneratingScript ? 'Generating...' : 'Generate Script'}
+          </Button>
+        </div>
+        {error && <p className="mt-2 text-red-500">{error}</p>}
         <div className="mt-4 h-[50vh] overflow-auto rounded-md bg-gray-100 p-2 dark:bg-gray-800">
           {fetchedData && (
             <pre className="text-sm break-words whitespace-pre-wrap">
