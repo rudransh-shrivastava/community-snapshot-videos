@@ -3,6 +3,7 @@ export interface Slide {
   type: string
   title: string
   endpoint: string
+  detailEndpointPattern?: string
   script: string
   customization: {
     bgColor?: string

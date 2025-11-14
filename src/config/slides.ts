@@ -25,14 +25,15 @@ export const slideConfigurations: Partial<Slide>[] = [
     id: 'sponsors-slide',
     type: 'sponsors',
     title: 'Sponsors',
-    endpoint: '/api/v0/sponsors',
+    endpoint: '/api/v0/sponsors/',
     script: 'A big thank you to our sponsors who make our work possible.',
   },
   {
     id: 'projects-slide',
     type: 'projects',
     title: 'New Projects',
-    endpoint: '/api/v0/snapshots/2025-02/projects',
+    endpoint: '/api/v0/snapshots/2025-02/projects/',
+    detailEndpointPattern: '/api/v0/projects/{key}',
     script: 'Here are some of the new projects from our community.',
   },
   {

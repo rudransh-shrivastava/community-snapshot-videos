@@ -1,0 +1,1 @@
+export const NEST_API_URL = process.env.NEXT_PUBLIC_OWASP_NEST_API_URL || ''

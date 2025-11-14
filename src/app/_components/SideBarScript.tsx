@@ -1,5 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { enrichItems, fetchAllPages } from '@/lib/api'
+import { NEST_API_URL } from '@/lib/constants'
 import type { Slide } from '@/types/slide'
 import { Play } from 'lucide-react'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -30,18 +32,20 @@ export function SideBarScript({
     setIsFetchingData(true)
     setError(null)
 
-    // Clear the cache for the current slide before fetching
     setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: null }))
 
-    const url = `${process.env.NEXT_PUBLIC_OWASP_NEST_API_URL}${currentSlide.endpoint}`
+    const listEndpoint = `${NEST_API_URL}${currentSlide.endpoint}`
 
     try {
-      const response = await fetch(url)
-      if (!response.ok) {
-        throw new Error(`Failed to fetch data from ${url}`)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let items = await fetchAllPages<{ [key: string]: any }>(listEndpoint)
+
+      if (currentSlide.detailEndpointPattern) {
+        const detailPattern = `${NEST_API_URL}${currentSlide.detailEndpointPattern}`
+        items = await enrichItems(items, detailPattern)
       }
-      const data = await response.json()
-      setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: data }))
+
+      setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: items }))
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)
@@ -111,7 +115,7 @@ export function SideBarScript({
         {error && <p className="mt-2 text-red-500">{error}</p>}
         <div className="mt-4 h-[50vh] overflow-auto rounded-md bg-gray-100 p-2 dark:bg-gray-800">
           {fetchedData && (
-            <pre className="text-sm break-words whitespace-pre-wrap">
+            <pre className="text-sm wrap-break-word whitespace-pre-wrap">
               {JSON.stringify(fetchedData, null, 2)}
             </pre>
           )}
