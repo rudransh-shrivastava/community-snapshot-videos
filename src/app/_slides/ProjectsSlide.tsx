@@ -19,7 +19,14 @@ export function ProjectsSlide({ slide, data }: SlideComponentProps) {
     },
   ]
 
-  const temp = { stars: 4430000, forks: 12, issues: 13, repositories: 2, contributors: 92, maintainers: ['Me', 'Him'] }
+  const temp = {
+    stars: 4430000,
+    forks: 12,
+    issues: 13,
+    repositories: 2,
+    contributors: 92,
+    maintainers: ['Me', 'Him'],
+  }
 
   return (
     <div className="flex h-full flex-col items-center p-12 text-center">
