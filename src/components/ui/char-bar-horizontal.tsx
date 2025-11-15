@@ -12,21 +12,10 @@ import {
 
 export const description = 'A horizontal bar chart'
 
-const chartData = [
-  { month: 'Project 1', releases: 12 },
-  { month: 'Project 2', releases: 5 },
-  { month: 'Project 3', releases: 23 },
-  { month: 'Project 4', releases: 3 },
-  { month: 'Project 5', releases: 29 },
-  { month: 'Project 6', releases: 21 },
-  { month: 'project 7', releases: 23 },
-  { month: 'Project 8', releases: 3 },
-  { month: 'Project 9', releases: 19 },
-  { month: 'Project 10', releases: 1 },
-  { month: 'Project 11', releases: 7 },
-  { month: 'Project 12', releases: 8 },
-  { month: 'Project 14', releases: 21 },
-]
+interface ChartData {
+  project: string
+  releases: number
+}
 
 const chartConfig = {
   releases: {
@@ -35,12 +24,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ChartBarHorizontal() {
+export function ChartBarHorizontal({ chartData }: { chartData: ChartData[] }) {
   return (
     <Card className="w-full border-none shadow-none">
       <CardHeader>
         <CardTitle>Releases</CardTitle>
-        <CardDescription>September 2025</CardDescription>
+        <CardDescription>Top 10 releases from September 2025</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -55,12 +44,12 @@ export function ChartBarHorizontal() {
           >
             <XAxis type="number" dataKey="releases" hide />
             <YAxis
-              dataKey="month"
+              dataKey="project"
               type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              width={100}
+              width={200}
               tickFormatter={(value) => value.slice(0)}
             />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />

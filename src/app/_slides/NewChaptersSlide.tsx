@@ -18,8 +18,6 @@ interface Chapter {
 export function NewChaptersSlide({ data }: SlideComponentProps) {
   const newChapters: Chapter[] = data || []
 
-  console.log('new cha', newChapters)
-
   const convertCoordsToStyle = (lat: number, lon: number) => {
     // the map is incomplete, it does not cover any area above greenland and anything below
     // south america so we need to account for that.
