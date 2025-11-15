@@ -4,7 +4,7 @@ import { enrichItems, fetchAllPages } from '@/lib/api'
 import { NEST_API_URL } from '@/lib/constants'
 import type { Slide } from '@/types/slide'
 import { Play } from 'lucide-react'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 export function SideBarScript({
   currentSlide,
@@ -21,7 +21,16 @@ export function SideBarScript({
 }) {
   const [isFetchingData, setIsFetchingData] = useState(false)
   const [isGeneratingScript, setIsGeneratingScript] = useState(false)
+  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false)
+  const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const audioRef = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    if (audioUrl && audioRef.current) {
+      audioRef.current.play().catch((e) => console.error('Audio play failed:', e))
+    }
+  }, [audioUrl])
 
   const handleFetchData = async () => {
     if (!currentSlide || !currentSlide.endpoint) {
@@ -98,6 +107,43 @@ export function SideBarScript({
     }
   }
 
+  const handleGenerateAudio = async () => {
+    if (!currentSlide?.script) {
+      setError('No script to generate audio from.')
+      return
+    }
+
+    setIsGeneratingAudio(true)
+    setError(null)
+    setAudioUrl(null)
+
+    try {
+      const response = await fetch('/api/generate-audio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ script: currentSlide.script }),
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate audio')
+      }
+
+      const audioBlob = await response.blob()
+      const url = URL.createObjectURL(audioBlob)
+      setAudioUrl(url)
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError('An unknown error occurred')
+      }
+    } finally {
+      setIsGeneratingAudio(false)
+    }
+  }
+
   return (
     <div className="flex flex-col gap-4 p-2">
       <div className="dark:bg-secondary/30 rounded-md border p-4">
@@ -130,9 +176,19 @@ export function SideBarScript({
         className="h-full"
       />
       <div className="dark:bg-secondary/30 rounded-md border p-4">
-        <Button className="cursor-pointer rounded-full p-0" size="icon">
-          <Play />
+        <Button
+          className="cursor-pointer rounded-full p-0"
+          size="icon"
+          onClick={handleGenerateAudio}
+          disabled={isGeneratingAudio || !currentSlide?.script}
+        >
+          {isGeneratingAudio ? '...' : <Play />}
         </Button>
+        {audioUrl && (
+          <audio controls ref={audioRef} className="mt-2 w-full" src={audioUrl}>
+            Your browser does not support the audio element.
+          </audio>
+        )}
       </div>
     </div>
   )

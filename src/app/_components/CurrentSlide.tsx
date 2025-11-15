@@ -1,9 +1,9 @@
-import { toPng } from 'html-to-image'
-import { Download } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { slideRegistry } from '@/config/slides'
 import type { Slide } from '@/types/slide'
+import { toPng } from 'html-to-image'
+import { Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import { Button } from '@/components/ui/button'
 
 export function CurrentSlide({
   currentSlide,
@@ -90,24 +90,24 @@ export function CurrentSlide({
     return <SlideComponent slide={currentSlide} data={fetchedData} />
   }
 
-return (
-  <div
-    className="dark:bg-background bg-secondary mx-2 ml-4 flex flex-col items-center justify-center p-8 gap-4"
-    ref={containerRef}
-  >
-    <div className="relative w-full flex-1 flex items-center justify-center">
-      <div
-        className="light absolute aspect-video h-[1080px] overflow-hidden border bg-white text-black transition-all"
-        ref={slideRef}
-        style={{ transform: `scale(${scale})`, opacity: scale === 0 ? 0 : 1 }}
-      >
-        {renderContent()}
+  return (
+    <div
+      className="dark:bg-background bg-secondary mx-2 ml-4 flex flex-col items-center justify-center gap-4 p-8"
+      ref={containerRef}
+    >
+      <div className="relative flex w-full flex-1 items-center justify-center">
+        <div
+          className="light absolute aspect-video h-[1080px] overflow-hidden border bg-white text-black transition-all"
+          ref={slideRef}
+          style={{ transform: `scale(${scale})`, opacity: scale === 0 ? 0 : 1 }}
+        >
+          {renderContent()}
+        </div>
       </div>
+      <Button onClick={handleDownload} disabled={isDownloading || !currentSlide}>
+        <Download />
+        {isDownloading ? 'Downloading...' : 'Download Image'}
+      </Button>
     </div>
-    <Button onClick={handleDownload} disabled={isDownloading || !currentSlide}>
-      <Download />
-      {isDownloading ? 'Downloading...' : 'Download Image'}
-    </Button>
-  </div>
-)
+  )
 }
