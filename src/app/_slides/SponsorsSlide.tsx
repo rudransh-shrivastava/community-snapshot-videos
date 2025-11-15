@@ -11,7 +11,13 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
         {sponsors.length > 0 ? (
           sponsors.map((sponsor) => (
             <div key={sponsor.name} className="shrink-0">
-              <Image src={sponsor.image_url} alt={sponsor.name} width={140} height={140} />
+              <Image
+                src={sponsor.image_url}
+                className="object-contain"
+                alt={sponsor.name}
+                width={140}
+                height={140}
+              />
             </div>
           ))
         ) : (

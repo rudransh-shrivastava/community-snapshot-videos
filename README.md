@@ -48,7 +48,7 @@ Copy contents of `.env.example`:
 cat .env.example > .env
 ```
 
-*Note*: you must add a valid `GEMINI_API_KEY` and update the Nest API URL.
+_Note_: you must add a valid `GEMINI_API_KEY` and update the Nest API URL.
 
 ### Run the project
 
@@ -67,17 +67,16 @@ make run
 ### Steps to generate a video
 
 1. Click on any snapshot shown in the image below:
-<img width="1590" height="724" alt="image" src="https://github.com/user-attachments/assets/12054412-861e-4c15-8951-0b6f430dc7d7" />
+   <img width="1590" height="724" alt="image" src="https://github.com/user-attachments/assets/12054412-861e-4c15-8951-0b6f430dc7d7" />
 
 2. Visit each slide and use "Fetch Data", "Generate Script" and "play audio (|>)" (at the bottom) to generate the metadata:
-<img width="416" height="155" alt="image" src="https://github.com/user-attachments/assets/d6684f53-61d3-4a29-8b1e-5406523c6043" />
-<img width="241" height="178" alt="image" src="https://github.com/user-attachments/assets/0af34032-b191-4fa1-bff1-55dc3fde3994" />
+   <img width="416" height="155" alt="image" src="https://github.com/user-attachments/assets/d6684f53-61d3-4a29-8b1e-5406523c6043" />
+   <img width="241" height="178" alt="image" src="https://github.com/user-attachments/assets/0af34032-b191-4fa1-bff1-55dc3fde3994" />
 
 3. Make sure all slides have all green indicators on the left side:
-<img width="238" height="361" alt="image" src="https://github.com/user-attachments/assets/4304f402-7ee8-4a57-a1b6-a9f9354ddbf7" />
- 
-5. Use "Generate Video" button in the Nav Bar to generate a video:
+   <img width="238" height="361" alt="image" src="https://github.com/user-attachments/assets/4304f402-7ee8-4a57-a1b6-a9f9354ddbf7" />
+
+4. Use "Generate Video" button in the Nav Bar to generate a video:
    - The slides marked as "done" will be rendered in a video!
 
-6. The video will be downloaded in the browser.
-
+5. The video will be downloaded in the browser.
