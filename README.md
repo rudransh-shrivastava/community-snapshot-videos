@@ -11,7 +11,8 @@ The hackathon project aims to generate YouTube videos to showcase a quick recap 
 ## Sample Video Generation
 
 We generated a video for [October 2025 OWASP Community Snapshot](https://nest.owasp.org/snapshots/2025-11)
-<INSERT VIDEO HERE>
+
+*Note*: The video will be uploaded soon, we hit our limits for the Gemini API free plans.
 
 ## Key Features
 
@@ -80,3 +81,7 @@ make run
    - The slides marked as "done" will be rendered in a video!
 
 5. The video will be downloaded in the browser.
+
+### Known Bugs
+- Unable to generate audio in the first slid.
+- Next/Image causes issues in video rendering.
