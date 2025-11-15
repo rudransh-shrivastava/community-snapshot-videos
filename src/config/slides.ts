@@ -20,12 +20,14 @@ export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> =
 
 export const slideConfigurations: Partial<Slide>[] = [
   {
+    disableScriptGeneration: true,
     id: 'intro-slide',
     script: '',
     title: 'Welcome',
     type: 'intro',
   },
   {
+    disableScriptGeneration: true,
     endpoint: '/api/v0/sponsors/',
     id: 'sponsors-slide',
     script: '',
@@ -65,6 +67,7 @@ export const slideConfigurations: Partial<Slide>[] = [
     type: 'releases',
   },
   {
+    disableScriptGeneration: true,
     endpoint: '/api/v0/snapshots/2025-02/members/',
     id: 'new-contributors-slide',
     script: '',
@@ -72,6 +75,7 @@ export const slideConfigurations: Partial<Slide>[] = [
     type: 'newContributors',
   },
   {
+    disableScriptGeneration: true,
     id: 'outro-slide',
     script: '',
     title: 'Thank You',

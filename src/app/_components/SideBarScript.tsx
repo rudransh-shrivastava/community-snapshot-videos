@@ -172,7 +172,10 @@ export function SideBarScript({
           >
             {isFetchingData ? 'Loading...' : 'Fetch Data'}
           </Button>
-          <Button onClick={handleGenerateScript} disabled={isGeneratingScript || !currentSlide}>
+          <Button
+            onClick={handleGenerateScript}
+            disabled={isGeneratingScript || !currentSlide || currentSlide.disableScriptGeneration}
+          >
             {isGeneratingScript ? 'Generating...' : 'Generate Script'}
           </Button>
         </div>

@@ -6,6 +6,7 @@ export interface Slide {
   detailEndpointPattern?: string
   script?: string
   scriptGenerationPrompt?: string
+  disableScriptGeneration?: boolean
   customization: {
     bgColor?: string
     textColor?: string
