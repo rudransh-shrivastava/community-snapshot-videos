@@ -48,7 +48,7 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       disableScriptGeneration: true,
       endpoint: '/api/v0/sponsors/',
       id: 'sponsors-slide',
-      script: 'A big thank you to our sponsors who make our work possible.',
+      script: 'Before we begin, a huge thanks to our sponsors who make our work possible.',
       title: 'Sponsors',
       type: 'sponsors',
     },
@@ -58,14 +58,14 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       id: 'projects-slide',
       script: '',
       scriptGenerationPrompt: `
-      You are a scriptwriter for a tech presentation.
-      Your task is to generate a script for a presentation slide.
-      The script should be simple and direct.
-      Based on the data provided, state the name of the project and its leaders.
-      Do not add any extra words, introduction or conclusion.
-      For example, if the data is about a project named "OWASP Top 10" with leaders "John Doe" and "Jane Doe", the script should be something like: "OWASP Top 10, led by John Doe and Jane Doe."
-      Start the presentation with the text: "Here are some of the new projects from our community."
-    `,
+        You are a scriptwriter for a tech presentation.
+        Your task is to generate a script for a presentation slide.
+        The script should be simple and direct.
+        Based on the data provided, state the name of the project and its leaders.
+        Do not add any extra words, introduction or conclusion.
+        For example, if the data is about a project named "OWASP Top 10" with leaders "John Doe" and "Jane Doe", the script should be something like: "OWASP Top 10, led by John Doe and Jane Doe."
+        Start the presentation with the text: "Here are some of the new projects from our community."
+      `,
       title: 'New Projects',
       type: 'projects',
     },
@@ -74,6 +74,16 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       endpoint: `/api/v0/snapshots/${snapshotKey}/chapters/`,
       id: 'new-chapters-slide',
       script: '',
+      scriptGenerationPrompt: `
+        You are a scriptwriter for a tech presentation.
+        Your task is to generate a script for a presentation slide.
+        The script should be simple and direct.
+        Based on the data provided, state the chapter location only.
+        Do not add any extra words, introduction or conclusion.
+        For example, if the data is "OWASP Saskatoon, Canada" the script should be something like: "Canada"
+        Make sure to remove duplicate chapter location / country names.
+        Start the presentation with the text: "New chapters were opened in "
+      `,
       title: 'New Chapters',
       type: 'newChapters',
     },
@@ -81,6 +91,15 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       endpoint: `/api/v0/snapshots/${snapshotKey}/releases/`,
       id: 'releases-slide',
       script: '',
+      scriptGenerationPrompt: `
+        You are a scriptwriter for a tech presentation.
+        Your task is to generate a script for a presentation slide.
+        The script should be simple and direct.
+        Based on the data provided, state the  project names and their release count only.
+        Do not add any extra words, introduction or conclusion.
+        For example, if the data is {"releases": [{"devguard":12}, {"nest":9}, {"blt":2}]}, the script should be something like: "devguard with 12 releases, nest with 9 releases and blt with 2 releases"
+        Start the presentation with the text: "The top 3 projects releases were of "
+      `,
       title: 'Releases',
       type: 'releases',
     },
@@ -88,7 +107,7 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       disableScriptGeneration: true,
       endpoint: `/api/v0/snapshots/${snapshotKey}/members/`,
       id: 'new-contributors-slide',
-      script: `This month, we had ${snapshot.new_users_count} new contributors`,
+      script: `And finally, we had ${snapshot.new_users_count} new contributors this month`,
       title: 'New Contributors',
       type: 'newContributors',
     },
