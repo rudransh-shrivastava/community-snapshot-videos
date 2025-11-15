@@ -31,6 +31,36 @@ Ensure you have the following:
 
 #### Setup Environment Variables
 
+Create a `.env` file:
+```bash
+touch .env
+```
+Copy contents of `.env.example`:
+```bash
+cat .env.example > .env
+```
+Note: you must add a `GEMINI_API_KEY` and update the Nest API URL.
+
+#### Run the project
+1. Install node packages.
+```bash
+pnpm install
+```
+2. Run the project in Docker
+```bash
+make run
+```
+
+#### Guide
+1. Click on any snapshot shown in the image below:
+
+2. Visit each slide and use "Fetch Data", "Generate Script" and "|>" (at the bottom) to generate the metadata:
+
+3. Use "Generate Video" button in the Nav Bar to generate a video:
+    - The slides marked as "done" will be rendered in a video!
+
+4. The video will be downloaded in the browser.
+
 ## Authors / Team Members
 
 - [Gopal Lohar](https://github.com/gopal-lohar) : [Email](mailto:gopal.lohar.dev@gmail.com)
