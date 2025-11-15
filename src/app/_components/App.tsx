@@ -61,7 +61,9 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   const [currentSlide, setCurrentSlide] = useState<Slide | null>(slides[0] || null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fetchedDataCache, setFetchedDataCache] = useState<Record<string, any>>({})
-  const [scriptCache, setScriptCache] = useState<Record<string, string>>({})
+  const [scriptCache, setScriptCache] = useState<Record<string, string>>(
+    Object.fromEntries(slides.filter((s) => s.script).map((s) => [s.id, s.script as string]))
+  )
   const [audioUrlCache, setAudioUrlCache] = useState<Record<string, string | null>>({})
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false)
   const [processingSlide, setProcessingSlide] = useState<ProcessingSlide | null>(null)
