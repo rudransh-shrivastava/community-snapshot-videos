@@ -29,14 +29,16 @@ export function StatusIndicator({
         : 'todo'
 
   const scriptStatus: Status = slide.disableScriptGeneration
-    ? 'not-applicable'
+    ? 'done'
     : processingSlide?.id === slide.id && processingSlide?.task === 'script'
       ? 'pending'
       : scriptCache[slide.id]
         ? 'done'
         : 'todo'
 
-  const audioStatus: Status = !scriptCache[slide.id]
+  const scriptExists = scriptCache[slide.id] ?? slide.script
+
+  const audioStatus: Status = !scriptExists
     ? 'not-applicable'
     : processingSlide?.id === slide.id && processingSlide?.task === 'audio'
       ? 'pending'
@@ -46,9 +48,9 @@ export function StatusIndicator({
 
   const isReady =
     (dataStatus === 'done' || dataStatus === 'not-applicable') &&
-    (scriptStatus === 'done' || scriptStatus === 'not-applicable') &&
+    scriptStatus === 'done' &&
     (audioStatus === 'done' || audioStatus === 'not-applicable') &&
-    !!scriptCache[slide.id]
+    !!scriptExists
 
   const getIcon = (task: ProcessingTask, status: Status) => {
     const icons = {

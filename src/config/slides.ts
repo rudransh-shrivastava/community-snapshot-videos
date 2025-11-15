@@ -37,13 +37,15 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
   const snapshotKey = snapshot.key
   return [
     {
+      data: snapshot,
+      disableScriptGeneration: true,
       id: 'intro-slide',
       script: 'Welcome to our presentation.',
       title: 'Welcome',
       type: 'intro',
-      data: snapshot,
     },
     {
+      disableScriptGeneration: true,
       endpoint: '/api/v0/sponsors/',
       id: 'sponsors-slide',
       script: 'A big thank you to our sponsors who make our work possible.',
@@ -54,7 +56,7 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       detailEndpointPattern: '/api/v0/projects/{key}',
       endpoint: `/api/v0/snapshots/${snapshotKey}/projects/`,
       id: 'projects-slide',
-      script: 'Here are some of the new projects from our community.',
+      script: '',
       scriptGenerationPrompt: `
       You are a scriptwriter for a tech presentation.
       Your task is to generate a script for a presentation slide.
@@ -71,18 +73,19 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       detailEndpointPattern: '/api/v0/chapters/{key}',
       endpoint: `/api/v0/snapshots/${snapshotKey}/chapters/`,
       id: 'new-chapters-slide',
-      script: 'Here are the new chapters that have joined us.',
+      script: '',
       title: 'New Chapters',
       type: 'newChapters',
     },
     {
       endpoint: `/api/v0/snapshots/${snapshotKey}/releases/`,
       id: 'releases-slide',
-      script: 'Here are the latest releases from our community.',
+      script: '',
       title: 'Releases',
       type: 'releases',
     },
     {
+      disableScriptGeneration: true,
       endpoint: `/api/v0/snapshots/${snapshotKey}/members/`,
       id: 'new-contributors-slide',
       script: "Let's welcome our new contributors!",
@@ -90,6 +93,7 @@ export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
       type: 'newContributors',
     },
     {
+      disableScriptGeneration: true,
       id: 'outro-slide',
       script: 'Thank you for your attention.',
       title: 'Thank You',
