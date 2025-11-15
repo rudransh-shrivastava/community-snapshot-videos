@@ -6,16 +6,62 @@ import { SideBarLeft } from '@/app/_components/SideBarLeft'
 import { SideBarScript } from '@/app/_components/SideBarScript'
 import { VideoGenerationManager } from '@/app/_components/VideoGenerationManager'
 import { slideConfigurations } from '@/config/slides'
+import { NEST_API_URL } from '@/lib/constants'
 import type { Slide } from '@/types/slide'
-import { useState } from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
 
-export function App() {
+interface Snapshot {
+  created_at: string
+  end_at: string
+  key: string
+  start_at: string
+  title: string
+  updated_at: string
+
+  new_chapters_count: number
+  new_issues_count: number
+  new_projects_count: number
+  new_releases_count: number
+  new_users_count: number
+}
+
+export function App({ snapshotId }: { snapshotId: string }) {
+  const snapshot_url = `${NEST_API_URL}/api/v0/snapshots/${snapshotId}`
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    axios
+      .get(snapshot_url)
+      .then((response) => {
+        setSnapshot(response.data)
+        setLoading(false)
+      })
+      .catch((error) => {
+        console.error('Error fetching snapshot:', error)
+        setLoading(false)
+      })
+  }, [snapshot_url])
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (!snapshot) {
+    return <div className="p-16 text-center">Snapshot not found</div>
+  }
+
+  return <SnapshotShow snapshot={snapshot} />
+}
+
+function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   const [slides] = useState<Slide[]>(
     slideConfigurations.map(
       (s) =>
         ({
           ...s,
-          data: {},
+          data: snapshot,
           customization: {},
         }) as Slide
     )
