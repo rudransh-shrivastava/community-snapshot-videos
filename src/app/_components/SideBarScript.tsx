@@ -11,6 +11,10 @@ export function SideBarScript({
   setCurrentSlide,
   fetchedData,
   setFetchedDataCache,
+  scriptCache,
+  setScriptCache,
+  audioUrlCache,
+  setAudioUrlCache,
 }: {
   currentSlide: Slide | null
   setCurrentSlide: Dispatch<SetStateAction<Slide | null>>
@@ -18,13 +22,18 @@ export function SideBarScript({
   fetchedData: any
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setFetchedDataCache: Dispatch<SetStateAction<Record<string, any>>>
+  scriptCache: Record<string, string>
+  setScriptCache: Dispatch<SetStateAction<Record<string, string>>>
+  audioUrlCache: Record<string, string | null>
+  setAudioUrlCache: Dispatch<SetStateAction<Record<string, string | null>>>
 }) {
   const [isFetchingData, setIsFetchingData] = useState(false)
   const [isGeneratingScript, setIsGeneratingScript] = useState(false)
   const [isGeneratingAudio, setIsGeneratingAudio] = useState(false)
-  const [audioUrl, setAudioUrl] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
+
+  const audioUrl = currentSlide ? audioUrlCache[currentSlide.id] : null
 
   useEffect(() => {
     if (audioUrl && audioRef.current) {
@@ -95,6 +104,9 @@ export function SideBarScript({
       }
 
       const { script } = await response.json()
+      if (currentSlide?.id) {
+        setScriptCache((prev) => ({ ...prev, [currentSlide.id]: script }))
+      }
       setCurrentSlide((prev) => (prev ? { ...prev, script } : prev))
     } catch (error) {
       if (error instanceof Error) {
@@ -115,7 +127,9 @@ export function SideBarScript({
 
     setIsGeneratingAudio(true)
     setError(null)
-    setAudioUrl(null)
+    if (currentSlide?.id) {
+      setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: null }))
+    }
 
     try {
       const response = await fetch('/api/generate-audio', {
@@ -132,7 +146,9 @@ export function SideBarScript({
 
       const audioBlob = await response.blob()
       const url = URL.createObjectURL(audioBlob)
-      setAudioUrl(url)
+      if (currentSlide?.id) {
+        setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: url }))
+      }
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message)
@@ -143,6 +159,8 @@ export function SideBarScript({
       setIsGeneratingAudio(false)
     }
   }
+
+  const displayedScript = currentSlide ? (scriptCache[currentSlide.id] ?? currentSlide.script) : ''
 
   return (
     <div className="flex flex-col gap-4 p-2">
@@ -169,9 +187,13 @@ export function SideBarScript({
       </div>
       <Textarea
         placeholder="Type your Transcript here."
-        value={currentSlide?.script}
+        value={displayedScript}
         onChange={(e) => {
-          setCurrentSlide((prev) => (prev ? { ...prev, script: e.target.value } : prev))
+          if (currentSlide) {
+            const newScript = e.target.value
+            setScriptCache((prev) => ({ ...prev, [currentSlide.id]: newScript }))
+            setCurrentSlide((prev) => (prev ? { ...prev, script: newScript } : prev))
+          }
         }}
         className="h-full"
       />

@@ -22,11 +22,18 @@ export function App() {
   const [currentSlide, setCurrentSlide] = useState<Slide | null>(slides[0] || null)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [fetchedDataCache, setFetchedDataCache] = useState<Record<string, any>>({})
+  const [scriptCache, setScriptCache] = useState<Record<string, string>>({})
+  const [audioUrlCache, setAudioUrlCache] = useState<Record<string, string | null>>({})
 
   return (
     <div className="bg-background text-foreground grid h-screen grid-cols-[10rem_1fr_24rem] grid-rows-[3rem_auto]">
       <Navbar />
-      <SideBarLeft slides={slides} setCurrentSlide={setCurrentSlide} currentSlide={currentSlide} />
+      <SideBarLeft
+        slides={slides}
+        setCurrentSlide={setCurrentSlide}
+        currentSlide={currentSlide}
+        scriptCache={scriptCache}
+      />
       <CurrentSlide
         currentSlide={currentSlide}
         fetchedData={currentSlide ? fetchedDataCache[currentSlide.id] : null}
@@ -36,6 +43,10 @@ export function App() {
         setCurrentSlide={setCurrentSlide}
         fetchedData={currentSlide ? fetchedDataCache[currentSlide.id] : null}
         setFetchedDataCache={setFetchedDataCache}
+        scriptCache={scriptCache}
+        setScriptCache={setScriptCache}
+        audioUrlCache={audioUrlCache}
+        setAudioUrlCache={setAudioUrlCache}
       />
     </div>
   )
