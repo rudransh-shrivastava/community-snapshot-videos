@@ -1,11 +1,27 @@
 import { SlideComponentProps } from '@/types/slide'
 
 export function IntroSlide({ slide }: SlideComponentProps) {
-  console.log(slide)
+  const options = {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  } as Intl.DateTimeFormatOptions
+
+  const startDate = new Date(slide.data.start_at)
+  startDate.setUTCMonth(startDate.getUTCMonth())
+  const endDate = new Date(slide.data.start_at)
+  endDate.setUTCMonth(endDate.getUTCMonth() + 1)
+
+  const formattedStart = startDate.toLocaleDateString('en-US', options)
+  const formattedEnd = endDate.toLocaleDateString('en-US', options)
+
   return (
     <div className="flex h-full flex-col items-center justify-center p-12 text-center">
       <h1 className="text-6xl font-bold">September 2025 OWASP Community Snapshot</h1>
-      <p className="mt-8 text-4xl">Sep 1, 2025 - Oct 1, 2025 </p>
+      <p className="mt-8 text-4xl">
+        {formattedStart} - {formattedEnd}
+      </p>
     </div>
   )
 }

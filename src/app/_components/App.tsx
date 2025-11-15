@@ -5,26 +5,12 @@ import { Navbar } from '@/app/_components/Navbar'
 import { SideBarLeft } from '@/app/_components/SideBarLeft'
 import { SideBarScript } from '@/app/_components/SideBarScript'
 import { VideoGenerationManager } from '@/app/_components/VideoGenerationManager'
+import type { Snapshot } from '@/config/slides'
 import { slideConfigurations } from '@/config/slides'
 import { NEST_API_URL } from '@/lib/constants'
 import type { Slide } from '@/types/slide'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-
-interface Snapshot {
-  created_at: string
-  end_at: string
-  key: string
-  start_at: string
-  title: string
-  updated_at: string
-
-  new_chapters_count: number
-  new_issues_count: number
-  new_projects_count: number
-  new_releases_count: number
-  new_users_count: number
-}
 
 export function App({ snapshotId }: { snapshotId: string }) {
   const snapshot_url = `${NEST_API_URL}/api/v0/snapshots/${snapshotId}`
@@ -57,11 +43,11 @@ export function App({ snapshotId }: { snapshotId: string }) {
 
 function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   const [slides] = useState<Slide[]>(
-    slideConfigurations.map(
+    slideConfigurations(snapshot).map(
       (s) =>
         ({
           ...s,
-          data: snapshot,
+          data: s.data || {},
           customization: {},
         }) as Slide
     )
@@ -76,7 +62,7 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   return (
     <>
       <div className="bg-background text-foreground grid h-screen grid-cols-[10rem_1fr_24rem] grid-rows-[3rem_auto]">
-        <Navbar onGenerateVideo={() => setIsGeneratingVideo(true)} />
+        <Navbar onGenerateVideo={() => setIsGeneratingVideo(true)} snapshotId={snapshot.key} />
         <SideBarLeft
           slides={slides}
           setCurrentSlide={setCurrentSlide}

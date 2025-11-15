@@ -18,28 +18,44 @@ export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> =
   outro: OutroSlide,
 }
 
-export const slideConfigurations: Partial<Slide>[] = [
-  {
-    disableScriptGeneration: true,
-    id: 'intro-slide',
-    script: '',
-    title: 'Welcome',
-    type: 'intro',
-  },
-  {
-    disableScriptGeneration: true,
-    endpoint: '/api/v0/sponsors/',
-    id: 'sponsors-slide',
-    script: '',
-    title: 'Sponsors',
-    type: 'sponsors',
-  },
-  {
-    detailEndpointPattern: '/api/v0/projects/{key}',
-    endpoint: '/api/v0/snapshots/2025-02/projects/',
-    id: 'projects-slide',
-    script: '',
-    scriptGenerationPrompt: `
+export interface Snapshot {
+  created_at: string
+  end_at: string
+  key: string
+  start_at: string
+  title: string
+  updated_at: string
+
+  new_chapters_count: number
+  new_issues_count: number
+  new_projects_count: number
+  new_releases_count: number
+  new_users_count: number
+}
+
+export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
+  const snapshotKey = snapshot.key
+  return [
+    {
+      id: 'intro-slide',
+      script: 'Welcome to our presentation.',
+      title: 'Welcome',
+      type: 'intro',
+      data: snapshot,
+    },
+    {
+      endpoint: '/api/v0/sponsors/',
+      id: 'sponsors-slide',
+      script: 'A big thank you to our sponsors who make our work possible.',
+      title: 'Sponsors',
+      type: 'sponsors',
+    },
+    {
+      detailEndpointPattern: '/api/v0/projects/{key}',
+      endpoint: `/api/v0/snapshots/${snapshotKey}/projects/`,
+      id: 'projects-slide',
+      script: 'Here are some of the new projects from our community.',
+      scriptGenerationPrompt: `
       You are a scriptwriter for a tech presentation.
       Your task is to generate a script for a presentation slide.
       The script should be simple and direct.
@@ -48,37 +64,36 @@ export const slideConfigurations: Partial<Slide>[] = [
       For example, if the data is about a project named "OWASP Top 10" with leaders "John Doe" and "Jane Doe", the script should be something like: "OWASP Top 10, led by John Doe and Jane Doe."
       Start the presentation with the text: "Here are some of the new projects from our community."
     `,
-    title: 'New Projects',
-    type: 'projects',
-  },
-  {
-    detailEndpointPattern: '/api/v0/chapters/{key}',
-    endpoint: '/api/v0/snapshots/2025-02/chapters/',
-    id: 'new-chapters-slide',
-    script: '',
-    title: 'New Chapters',
-    type: 'newChapters',
-  },
-  {
-    endpoint: '/api/v0/snapshots/2025-02/releases/',
-    id: 'releases-slide',
-    script: '',
-    title: 'Releases',
-    type: 'releases',
-  },
-  {
-    disableScriptGeneration: true,
-    endpoint: '/api/v0/snapshots/2025-02/members/',
-    id: 'new-contributors-slide',
-    script: '',
-    title: 'New Contributors',
-    type: 'newContributors',
-  },
-  {
-    disableScriptGeneration: true,
-    id: 'outro-slide',
-    script: '',
-    title: 'Thank You',
-    type: 'outro',
-  },
-]
+      title: 'New Projects',
+      type: 'projects',
+    },
+    {
+      detailEndpointPattern: '/api/v0/chapters/{key}',
+      endpoint: `/api/v0/snapshots/${snapshotKey}/chapters/`,
+      id: 'new-chapters-slide',
+      script: 'Here are the new chapters that have joined us.',
+      title: 'New Chapters',
+      type: 'newChapters',
+    },
+    {
+      endpoint: `/api/v0/snapshots/${snapshotKey}/releases/`,
+      id: 'releases-slide',
+      script: 'Here are the latest releases from our community.',
+      title: 'Releases',
+      type: 'releases',
+    },
+    {
+      endpoint: `/api/v0/snapshots/${snapshotKey}/members/`,
+      id: 'new-contributors-slide',
+      script: "Let's welcome our new contributors!",
+      title: 'New Contributors',
+      type: 'newContributors',
+    },
+    {
+      id: 'outro-slide',
+      script: 'Thank you for your attention.',
+      title: 'Thank You',
+      type: 'outro',
+    },
+  ]
+}
