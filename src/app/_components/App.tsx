@@ -12,6 +12,12 @@ import type { Slide } from '@/types/slide'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 
+export type ProcessingTask = 'data' | 'script' | 'audio'
+
+export interface ProcessingSlide {
+  id: string
+  task: ProcessingTask
+}
 export function App({ snapshotId }: { snapshotId: string }) {
   const snapshot_url = `${NEST_API_URL}/api/v0/snapshots/${snapshotId}`
   const [snapshot, setSnapshot] = useState<Snapshot | null>(null)
@@ -58,6 +64,7 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   const [scriptCache, setScriptCache] = useState<Record<string, string>>({})
   const [audioUrlCache, setAudioUrlCache] = useState<Record<string, string | null>>({})
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false)
+  const [processingSlide, setProcessingSlide] = useState<ProcessingSlide | null>(null)
 
   return (
     <>
@@ -68,6 +75,9 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
           setCurrentSlide={setCurrentSlide}
           currentSlide={currentSlide}
           scriptCache={scriptCache}
+          processingSlide={processingSlide}
+          fetchedDataCache={fetchedDataCache}
+          audioUrlCache={audioUrlCache}
         />
         <CurrentSlide
           currentSlide={currentSlide}
@@ -82,6 +92,8 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
           setScriptCache={setScriptCache}
           audioUrlCache={audioUrlCache}
           setAudioUrlCache={setAudioUrlCache}
+          processingSlide={processingSlide}
+          setProcessingSlide={setProcessingSlide}
         />
       </div>
       {isGeneratingVideo && (

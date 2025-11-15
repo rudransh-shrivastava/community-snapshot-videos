@@ -1,3 +1,4 @@
+import { ProcessingSlide, ProcessingTask } from '@/app/_components/App'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { enrichItems, fetchAllPages } from '@/lib/api'
@@ -15,6 +16,8 @@ export function SideBarScript({
   setScriptCache,
   audioUrlCache,
   setAudioUrlCache,
+  processingSlide,
+  setProcessingSlide,
 }: {
   currentSlide: Slide | null
   setCurrentSlide: Dispatch<SetStateAction<Slide | null>>
@@ -26,10 +29,9 @@ export function SideBarScript({
   setScriptCache: Dispatch<SetStateAction<Record<string, string>>>
   audioUrlCache: Record<string, string | null>
   setAudioUrlCache: Dispatch<SetStateAction<Record<string, string | null>>>
+  processingSlide: ProcessingSlide | null
+  setProcessingSlide: Dispatch<SetStateAction<ProcessingSlide | null>>
 }) {
-  const [isFetchingData, setIsFetchingData] = useState(false)
-  const [isGeneratingScript, setIsGeneratingScript] = useState(false)
-  const [isGeneratingAudio, setIsGeneratingAudio] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -41,37 +43,33 @@ export function SideBarScript({
     }
   }, [audioUrl])
 
+  const isProcessing = (task: ProcessingTask) =>
+    processingSlide?.id === currentSlide?.id && processingSlide?.task === task
+
   const handleFetchData = async () => {
     if (!currentSlide || !currentSlide.endpoint) {
       setError('No endpoint configured for the current slide.')
       return
     }
 
-    setIsFetchingData(true)
+    setProcessingSlide({ id: currentSlide.id, task: 'data' })
     setError(null)
-
     setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: null }))
 
     const listEndpoint = `${NEST_API_URL}${currentSlide.endpoint}`
 
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let items = await fetchAllPages<{ [key: string]: any }>(listEndpoint)
-
+      let items = await fetchAllPages<Record<string, any>>(listEndpoint)
       if (currentSlide.detailEndpointPattern) {
         const detailPattern = `${NEST_API_URL}${currentSlide.detailEndpointPattern}`
         items = await enrichItems(items, detailPattern)
       }
-
       setFetchedDataCache((prev) => ({ ...prev, [currentSlide.id]: items }))
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message)
-      } else {
-        setError('An unknown error occurred')
-      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
-      setIsFetchingData(false)
+      setProcessingSlide(null)
     }
   }
 
@@ -85,37 +83,25 @@ export function SideBarScript({
       return
     }
 
-    setIsGeneratingScript(true)
+    setProcessingSlide({ id: currentSlide.id, task: 'script' })
     setError(null)
 
     try {
       const response = await fetch('/api/generate-script', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          slide: { ...currentSlide, data: fetchedData },
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slide: { ...currentSlide, data: fetchedData } }),
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to generate script')
-      }
+      if (!response.ok) throw new Error('Failed to generate script')
 
       const { script } = await response.json()
-      if (currentSlide?.id) {
-        setScriptCache((prev) => ({ ...prev, [currentSlide.id]: script }))
-      }
+      setScriptCache((prev) => ({ ...prev, [currentSlide.id]: script }))
       setCurrentSlide((prev) => (prev ? { ...prev, script } : prev))
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message)
-      } else {
-        setError('An unknown error occurred')
-      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
-      setIsGeneratingScript(false)
+      setProcessingSlide(null)
     }
   }
 
@@ -125,42 +111,32 @@ export function SideBarScript({
       return
     }
 
-    setIsGeneratingAudio(true)
+    setProcessingSlide({ id: currentSlide.id, task: 'audio' })
     setError(null)
-    if (currentSlide?.id) {
-      setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: null }))
-    }
+    setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: null }))
 
     try {
       const response = await fetch('/api/generate-audio', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ script: currentSlide.script }),
       })
 
-      if (!response.ok) {
-        throw new Error('Failed to generate audio')
-      }
+      if (!response.ok) throw new Error('Failed to generate audio')
 
       const audioBlob = await response.blob()
       const url = URL.createObjectURL(audioBlob)
-      if (currentSlide?.id) {
-        setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: url }))
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        setError(error.message)
-      } else {
-        setError('An unknown error occurred')
-      }
+      setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: url }))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred')
     } finally {
-      setIsGeneratingAudio(false)
+      setProcessingSlide(null)
     }
   }
 
-  const displayedScript = currentSlide ? (scriptCache[currentSlide.id] ?? currentSlide.script) : ''
+  const displayedScript = currentSlide
+    ? (scriptCache[currentSlide.id] ?? currentSlide.script ?? '')
+    : ''
 
   return (
     <div className="flex flex-col gap-4 p-2">
@@ -168,15 +144,20 @@ export function SideBarScript({
         <div className="flex gap-2">
           <Button
             onClick={handleFetchData}
-            disabled={isFetchingData || !currentSlide || !currentSlide.endpoint}
+            disabled={!!processingSlide || !currentSlide || !currentSlide.endpoint}
           >
-            {isFetchingData ? 'Loading...' : 'Fetch Data'}
+            {isProcessing('data') ? 'Loading...' : 'Fetch Data'}
           </Button>
           <Button
             onClick={handleGenerateScript}
-            disabled={isGeneratingScript || !currentSlide || currentSlide.disableScriptGeneration}
+            disabled={
+              !!processingSlide ||
+              !currentSlide ||
+              currentSlide.disableScriptGeneration ||
+              !fetchedData
+            }
           >
-            {isGeneratingScript ? 'Generating...' : 'Generate Script'}
+            {isProcessing('script') ? 'Generating...' : 'Generate Script'}
           </Button>
         </div>
         {error && <p className="mt-2 text-red-500">{error}</p>}
@@ -205,9 +186,9 @@ export function SideBarScript({
           className="cursor-pointer rounded-full p-0"
           size="icon"
           onClick={handleGenerateAudio}
-          disabled={isGeneratingAudio || !currentSlide?.script}
+          disabled={!!processingSlide || !currentSlide?.script}
         >
-          {isGeneratingAudio ? '...' : <Play />}
+          {isProcessing('audio') ? '...' : <Play />}
         </Button>
         {audioUrl && (
           <audio controls ref={audioRef} className="mt-2 w-full" src={audioUrl}>
