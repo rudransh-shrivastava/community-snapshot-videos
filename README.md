@@ -11,6 +11,7 @@ The hackathon project aims to generate YouTube videos to showcase a quick recap 
 ## Sample Video Generation
 
 We generated a video for [October 2025 OWASP Community Snapshot](https://nest.owasp.org/snapshots/2025-11)
+<img width="1574" height="996" alt="image" src="https://github.com/user-attachments/assets/461d3964-e9f4-4ae0-ab6e-0763254ded1c" />
 
 *Note*: The video will be uploaded soon, we hit our limits for the Gemini API free plans.
 
