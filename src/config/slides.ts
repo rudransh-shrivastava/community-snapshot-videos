@@ -50,18 +50,22 @@ export const slideConfigurations: Partial<Slide>[] = [
     type: 'projects',
   },
   {
+    detailEndpointPattern: '/api/v0/chapters/{key}',
+    endpoint: '/api/v0/snapshots/2025-02/chapters/',
     id: 'new-chapters-slide',
     script: 'Here are the new chapters that have joined us.',
     title: 'New Chapters',
     type: 'newChapters',
   },
   {
+    endpoint: '/api/v0/snapshots/2025-02/releases/',
     id: 'releases-slide',
     script: 'Here are the latest releases from our community.',
     title: 'Releases',
     type: 'releases',
   },
   {
+    endpoint: '/api/v0/snapshots/2025-02/members/',
     id: 'new-contributors-slide',
     script: "Let's welcome our new contributors!",
     title: 'New Contributors',
