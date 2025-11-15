@@ -45,18 +45,29 @@ export function NewChaptersSlide({ data }: SlideComponentProps) {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-16 py-12 text-center">
       <h1 className="text-6xl font-bold">Welcoming New Chapters!</h1>
-      <div className="relative w-full">
-        {newChapters.map((chapter, index) => (
-          <div
-            key={index}
-            className="absolute -translate-x-1/2 -translate-y-full opacity-90"
-            style={convertCoordsToStyle(chapter.latitude, chapter.longitude)}
-          >
-            <MapPin strokeWidth={1.5} size={32} />
-            <span className="absolute top-full left-1/2 -translate-x-1/2 font-bold"></span>
-          </div>
-        ))}
-        <Image src={WorldMap} alt="Map of the world" />
+      <div className="flex items-center">
+        <div className="relative w-full">
+          {newChapters.map((chapter, index) => (
+            <div
+              key={index}
+              className="absolute -translate-x-1/2 -translate-y-full opacity-90"
+              style={convertCoordsToStyle(chapter.latitude, chapter.longitude)}
+            >
+              <MapPin strokeWidth={1.5} size={32} />
+              <span className="absolute top-full left-1/2 -translate-x-1/2 font-bold"></span>
+            </div>
+          ))}
+          <Image src={WorldMap} alt="Map of the world" />
+        </div>
+        <div className="divide-y-2 text-xl">
+          {newChapters
+            .sort((a, b) => a.longitude - b.longitude)
+            .map((chapter, index) => (
+              <div key={index} className="py-2">
+                {chapter.name}, {chapter.country}
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   )

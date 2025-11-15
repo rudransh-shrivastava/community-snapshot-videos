@@ -7,11 +7,11 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-24 p-12 text-center">
       <h1 className="text-5xl font-bold">{slide.title}</h1>
-      <div className="flex flex-wrap items-center justify-center gap-12">
+      <div className="flex flex-wrap items-center justify-center gap-2">
         {sponsors.length > 0 ? (
           sponsors.map((sponsor) => (
-            <div key={sponsor.name}>
-              <Image src={sponsor.image_url} alt={sponsor.name} width={80} height={80} />
+            <div key={sponsor.name} className="shrink-0">
+              <Image src={sponsor.image_url} alt={sponsor.name} width={140} height={140} />
             </div>
           ))
         ) : (

@@ -1,7 +1,4 @@
-import { Button } from '@/components/ui/button'
 import type { Slide } from '@/types/slide'
-import { toPng } from 'html-to-image'
-import { Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { SlideContent } from './SlideContent'
 
@@ -15,7 +12,6 @@ export function CurrentSlide({
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const slideRef = useRef<HTMLDivElement>(null)
-  const [isDownloading, setIsDownloading] = useState(false)
   const [scale, setScale] = useState(0)
 
   useEffect(() => {
@@ -32,37 +28,6 @@ export function CurrentSlide({
     observer.observe(container)
     return () => observer.disconnect()
   }, [])
-
-  const handleDownload = async () => {
-    if (!slideRef.current || !currentSlide) return
-
-    setIsDownloading(true)
-    try {
-      const dataUrl = await toPng(slideRef.current, {
-        cacheBust: true,
-        height: 1080,
-        pixelRatio: 1,
-        skipFonts: true,
-        style: {
-          left: '0',
-          opacity: '1',
-          position: 'absolute',
-          top: '0',
-          transform: 'scale(1)',
-        },
-        width: 1920,
-      })
-
-      const link = document.createElement('a')
-      link.download = `slide-${currentSlide.type || 'export'}-${Date.now()}.png`
-      link.href = dataUrl
-      link.click()
-    } catch (error) {
-      console.error('Failed to download image:', error)
-    } finally {
-      setIsDownloading(false)
-    }
-  }
 
   return (
     <div
@@ -82,10 +47,6 @@ export function CurrentSlide({
           )}
         </div>
       </div>
-      <Button onClick={handleDownload} disabled={isDownloading || !currentSlide}>
-        <Download />
-        {isDownloading ? 'Downloading...' : 'Download Image'}
-      </Button>
     </div>
   )
 }
