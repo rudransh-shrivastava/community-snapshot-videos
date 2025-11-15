@@ -1,10 +1,10 @@
 import { IntroSlide } from '@/app/_slides/IntroSlide'
 import { NewChaptersSlide } from '@/app/_slides/NewChaptersSlide'
+import { NewContributorsSlide } from '@/app/_slides/NewContributorsSlide'
 import { OutroSlide } from '@/app/_slides/OutroSlide'
 import { ProjectsSlide } from '@/app/_slides/ProjectsSlide'
 import { ReleasesSlide } from '@/app/_slides/ReleasesSlide'
 import { SponsorsSlide } from '@/app/_slides/SponsorsSlide'
-import { NewContributorsSlide } from '@/app/_slides/NewContributorsSlide'
 import { Slide, SlideComponentProps } from '@/types/slide'
 import { ComponentType } from 'react'
 
@@ -21,23 +21,21 @@ export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> =
 export const slideConfigurations: Partial<Slide>[] = [
   {
     id: 'intro-slide',
-    type: 'intro',
-    title: 'Welcome',
     script: 'Welcome to our presentation.',
+    title: 'Welcome',
+    type: 'intro',
   },
   {
-    id: 'sponsors-slide',
-    type: 'sponsors',
-    title: 'Sponsors',
     endpoint: '/api/v0/sponsors/',
+    id: 'sponsors-slide',
     script: 'A big thank you to our sponsors who make our work possible.',
+    title: 'Sponsors',
+    type: 'sponsors',
   },
   {
-    id: 'projects-slide',
-    type: 'projects',
-    title: 'New Projects',
-    endpoint: '/api/v0/snapshots/2025-02/projects/',
     detailEndpointPattern: '/api/v0/projects/{key}',
+    endpoint: '/api/v0/snapshots/2025-02/projects/',
+    id: 'projects-slide',
     script: 'Here are some of the new projects from our community.',
     scriptGenerationPrompt: `
       You are a scriptwriter for a tech presentation.
@@ -48,29 +46,31 @@ export const slideConfigurations: Partial<Slide>[] = [
       For example, if the data is about a project named "OWASP Top 10" with leaders "John Doe" and "Jane Doe", the script should be something like: "OWASP Top 10, led by John Doe and Jane Doe."
       Start the presentation with the text: "Here are some of the new projects from our community."
     `,
+    title: 'New Projects',
+    type: 'projects',
   },
   {
     id: 'new-chapters-slide',
-    type: 'newChapters',
-    title: 'New Chapters',
     script: 'Here are the new chapters that have joined us.',
+    title: 'New Chapters',
+    type: 'newChapters',
   },
   {
     id: 'releases-slide',
-    type: 'releases',
-    title: 'Releases',
     script: 'Here are the latest releases from our community.',
+    title: 'Releases',
+    type: 'releases',
   },
   {
     id: 'new-contributors-slide',
-    type: 'newContributors',
+    script: "Let's welcome our new contributors!",
     title: 'New Contributors',
-    script: 'Let\'s welcome our new contributors!',
+    type: 'newContributors',
   },
   {
     id: 'outro-slide',
-    type: 'outro',
-    title: 'Thank You',
     script: 'Thank you for your attention.',
+    title: 'Thank You',
+    type: 'outro',
   },
 ]
