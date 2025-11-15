@@ -1,9 +1,9 @@
 import { Button } from '@/components/ui/button'
-import { slideRegistry } from '@/config/slides'
 import type { Slide } from '@/types/slide'
 import { toPng } from 'html-to-image'
 import { Download } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
+import { SlideContent } from './SlideContent'
 
 export function CurrentSlide({
   currentSlide,
@@ -64,32 +64,6 @@ export function CurrentSlide({
     }
   }
 
-  const renderContent = () => {
-    if (!currentSlide) {
-      return <div className="flex h-full w-full items-center justify-center">No Slide Selected</div>
-    }
-
-    if (!currentSlide.type) {
-      return (
-        <div className="flex h-full w-full items-center justify-center">
-          Error: Slide has no type.
-        </div>
-      )
-    }
-
-    const SlideComponent = slideRegistry[currentSlide.type]
-
-    if (!SlideComponent) {
-      return (
-        <div className="flex h-full w-full items-center justify-center">
-          Error: Component for slide type &quot;{currentSlide.type}&quot; not found.
-        </div>
-      )
-    }
-
-    return <SlideComponent slide={currentSlide} data={fetchedData} />
-  }
-
   return (
     <div
       className="dark:bg-background bg-secondary mx-2 ml-4 flex flex-col items-center justify-center gap-4 p-8"
@@ -101,7 +75,11 @@ export function CurrentSlide({
           ref={slideRef}
           style={{ transform: `scale(${scale})`, opacity: scale === 0 ? 0 : 1 }}
         >
-          {renderContent()}
+          {currentSlide ? (
+            <SlideContent slide={currentSlide} data={fetchedData} />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">No Slide Selected</div>
+          )}
         </div>
       </div>
       <Button onClick={handleDownload} disabled={isDownloading || !currentSlide}>

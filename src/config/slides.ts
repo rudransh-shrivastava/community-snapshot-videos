@@ -21,14 +21,14 @@ export const slideRegistry: Record<string, ComponentType<SlideComponentProps>> =
 export const slideConfigurations: Partial<Slide>[] = [
   {
     id: 'intro-slide',
-    script: 'Welcome to our presentation.',
+    script: '',
     title: 'Welcome',
     type: 'intro',
   },
   {
     endpoint: '/api/v0/sponsors/',
     id: 'sponsors-slide',
-    script: 'A big thank you to our sponsors who make our work possible.',
+    script: '',
     title: 'Sponsors',
     type: 'sponsors',
   },
@@ -36,7 +36,7 @@ export const slideConfigurations: Partial<Slide>[] = [
     detailEndpointPattern: '/api/v0/projects/{key}',
     endpoint: '/api/v0/snapshots/2025-02/projects/',
     id: 'projects-slide',
-    script: 'Here are some of the new projects from our community.',
+    script: '',
     scriptGenerationPrompt: `
       You are a scriptwriter for a tech presentation.
       Your task is to generate a script for a presentation slide.
@@ -53,27 +53,27 @@ export const slideConfigurations: Partial<Slide>[] = [
     detailEndpointPattern: '/api/v0/chapters/{key}',
     endpoint: '/api/v0/snapshots/2025-02/chapters/',
     id: 'new-chapters-slide',
-    script: 'Here are the new chapters that have joined us.',
+    script: '',
     title: 'New Chapters',
     type: 'newChapters',
   },
   {
     endpoint: '/api/v0/snapshots/2025-02/releases/',
     id: 'releases-slide',
-    script: 'Here are the latest releases from our community.',
+    script: '',
     title: 'Releases',
     type: 'releases',
   },
   {
     endpoint: '/api/v0/snapshots/2025-02/members/',
     id: 'new-contributors-slide',
-    script: "Let's welcome our new contributors!",
+    script: '',
     title: 'New Contributors',
     type: 'newContributors',
   },
   {
     id: 'outro-slide',
-    script: 'Thank you for your attention.',
+    script: '',
     title: 'Thank You',
     type: 'outro',
   },
