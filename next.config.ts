@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
         port: '',
-        pathname: '/u/**', // The path structure for user IDs
+        pathname: '/u/**',
       },
     ],
   },

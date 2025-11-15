@@ -1,11 +1,9 @@
-import { PaginatedResponse, Sponsor } from '@/types/api'
+import { Sponsor } from '@/types/api'
 import { SlideComponentProps } from '@/types/slide'
 import Image from 'next/image'
 
 export function SponsorsSlide({ slide, data }: SlideComponentProps) {
-  const paginatedSponsors = data as PaginatedResponse<Sponsor> | undefined
-  const sponsors = paginatedSponsors?.items || []
-
+  const sponsors = (data||[]) as Sponsor[]
   return (
     <div className="flex h-full flex-col items-center justify-center gap-24 p-12 text-center">
       <h1 className="text-5xl font-bold">{slide.title}</h1>

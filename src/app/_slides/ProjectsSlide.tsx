@@ -16,7 +16,7 @@ export function ProjectsSlide({ slide, data }: SlideComponentProps) {
   return (
     <div className="flex h-full flex-col items-center p-12 text-center">
       <h1 className="mb-12 text-6xl font-bold">{slide.title}</h1>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         {projects.length > 0 ? (
           projects.map((project) => (
             <div
