@@ -68,10 +68,17 @@ function SnapshotShow({ snapshot }: { snapshot: Snapshot }) {
   const [isGeneratingVideo, setIsGeneratingVideo] = useState(false)
   const [processingSlide, setProcessingSlide] = useState<ProcessingSlide | null>(null)
 
+  const validSlides = slides.filter((slide) => scriptCache[slide.id] && audioUrlCache[slide.id])
+  const isGenerateDisabled = validSlides.length === 0
+
   return (
     <>
       <div className="bg-background text-foreground grid h-screen grid-cols-[10rem_1fr_24rem] grid-rows-[3rem_auto]">
-        <Navbar onGenerateVideo={() => setIsGeneratingVideo(true)} snapshotId={snapshot.key} />
+        <Navbar
+          onGenerateVideo={() => setIsGeneratingVideo(true)}
+          snapshotId={snapshot.key}
+          isGenerateDisabled={isGenerateDisabled}
+        />
         <SideBarLeft
           slides={slides}
           setCurrentSlide={setCurrentSlide}

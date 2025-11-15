@@ -27,7 +27,10 @@ export function VideoGenerationManager({
   const slideRendererRef = useRef<SlideRendererHandle>(null)
   const [slideIndexToRender, setSlideIndexToRender] = useState<number | null>(null)
 
+  const [hasStarted, setHasStarted] = useState(false)
+
   const startGeneration = async () => {
+    setHasStarted(true)
     setProgress('Loading video engine (FFmpeg)...')
     const ffmpeg = ffmpegRef.current
     ffmpeg.on('log', ({ message }) => {
@@ -44,7 +47,7 @@ export function VideoGenerationManager({
     })
     setProgress('FFmpeg loaded.')
 
-    const validSlides = slides.filter((slide) => scriptCache[slide.id])
+    const validSlides = slides.filter((slide) => scriptCache[slide.id] && audioUrlCache[slide.id])
     const videoSegments: string[] = []
 
     for (let i = 0; i < validSlides.length; i++) {
@@ -62,7 +65,8 @@ export function VideoGenerationManager({
 
       // Get audio
       const audioUrl = audioUrlCache[slide.id]
-      const audioData = audioUrl ? await fetchFile(audioUrl) : await fetchFile('/test-audio.wav')
+      if (!audioUrl) continue
+      const audioData = await fetchFile(audioUrl)
       await ffmpeg.writeFile('audio.wav', audioData)
 
       // Create video segment
@@ -123,9 +127,12 @@ export function VideoGenerationManager({
   }
 
   useEffect(() => {
-    startGeneration()
+    const validSlides = slides.filter((slide) => scriptCache[slide.id])
+    if (!hasStarted && validSlides.length > 0) {
+      startGeneration()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [scriptCache, slides, hasStarted])
 
   const slideToRender = slideIndexToRender !== null ? slides[slideIndexToRender] : null
 
