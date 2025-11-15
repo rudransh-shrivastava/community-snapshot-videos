@@ -20,7 +20,7 @@ interface ChartData {
 const chartConfig = {
   releases: {
     label: 'Releases',
-    color: 'var(--chart-1)',
+    color: 'var(--chart-3)',
   },
 } satisfies ChartConfig
 
@@ -42,7 +42,7 @@ export function ChartBarHorizontal({ chartData }: { chartData: ChartData[] }) {
               left: -20,
             }}
           >
-            <XAxis type="number" dataKey="releases" hide />
+            <XAxis type="number" dataKey="releases" />
             <YAxis
               dataKey="project"
               type="category"

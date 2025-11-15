@@ -28,7 +28,9 @@ export function ProjectsSlide({ slide, data }: SlideComponentProps) {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">Click &quot;Fetch Data&quot; to load projects.</p>
+          <p className="text-center text-gray-500">
+            Click &quot;Fetch Data&quot; to load projects.
+          </p>
         )}
       </div>
     </div>

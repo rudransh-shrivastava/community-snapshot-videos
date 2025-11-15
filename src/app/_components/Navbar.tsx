@@ -17,23 +17,25 @@ export function Navbar({
             <ArrowLeft />
           </Link>
         </Button>
-        <span>OWASP Nest API Hackathon {snapshotId}</span>
+        <span>Community Snapshot {snapshotId}</span>
       </div>
-      <Button variant="secondary" onClick={onGenerateVideo}>
-        <VideoIcon className="mr-2 h-4 w-4" />
-        Generate Video
-      </Button>
-      <Button
-        variant="secondary"
-        size="icon"
-        className="flex items-center justify-center rounded-full p-0"
-        onClick={() => {
-          const isDark = document.documentElement.classList.toggle('dark')
-          localStorage.setItem('theme', isDark ? 'dark' : 'light')
-        }}
-      >
-        <SunIcon />
-      </Button>
+      <div className="flex gap-2">
+        <Button variant="secondary" onClick={onGenerateVideo}>
+          <VideoIcon className="mr-2 h-4 w-4" />
+          Generate Video
+        </Button>
+        <Button
+          variant="secondary"
+          size="icon"
+          className="flex items-center justify-center rounded-full p-0"
+          onClick={() => {
+            const isDark = document.documentElement.classList.toggle('dark')
+            localStorage.setItem('theme', isDark ? 'dark' : 'light')
+          }}
+        >
+          <SunIcon />
+        </Button>
+      </div>
     </div>
   )
 }

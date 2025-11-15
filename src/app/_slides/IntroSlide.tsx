@@ -16,9 +16,12 @@ export function IntroSlide({ slide }: SlideComponentProps) {
   const formattedStart = startDate.toLocaleDateString('en-US', options)
   const formattedEnd = endDate.toLocaleDateString('en-US', options)
 
+  const monthNameOptions = { month: 'long', year: 'numeric' } as Intl.DateTimeFormatOptions
+  const monthName = startDate.toLocaleDateString(undefined, monthNameOptions)
+
   return (
     <div className="flex h-full flex-col items-center justify-center p-12 text-center">
-      <h1 className="text-6xl font-bold">September 2025 OWASP Community Snapshot</h1>
+      <h1 className="text-6xl font-bold">{monthName} OWASP Community Snapshot</h1>
       <p className="mt-8 text-4xl">
         {formattedStart} - {formattedEnd}
       </p>

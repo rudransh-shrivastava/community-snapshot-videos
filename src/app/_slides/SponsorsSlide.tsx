@@ -15,7 +15,9 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
             </div>
           ))
         ) : (
-          <p className="text-gray-500">Click &quot;Fetch Data&quot; to load sponsors.</p>
+          <p className="text-center text-gray-500">
+            Click &quot;Fetch Data&quot; to load sponsors.
+          </p>
         )}
       </div>
     </div>
