@@ -21,6 +21,11 @@ const eslintConfig = [
       'pnpm-lock.yaml',
     ],
   },
+  {
+    rules: {
+      '@next/next/no-img-element': 'off',
+    },
+  },
 ]
 
 export default eslintConfig

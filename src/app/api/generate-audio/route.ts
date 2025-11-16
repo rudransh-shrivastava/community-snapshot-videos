@@ -46,7 +46,9 @@ export async function POST(req: Request) {
 
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash-preview-tts',
-      contents: [{ parts: [{ text: `Read the following text exactly as written \n ${script}` }] }],
+      contents: [
+        { parts: [{ text: `Read the following text exactly as written \n \n ${script}` }] },
+      ],
       config: {
         responseModalities: ['AUDIO'],
         speechConfig: {
@@ -73,6 +75,7 @@ export async function POST(req: Request) {
     const data = response.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data
 
     if (!data) {
+      console.error('Failed to generate audio. Full response:', JSON.stringify(response, null, 2))
       return NextResponse.json({ error: 'Failed to generate audio' }, { status: 500 })
     }
 

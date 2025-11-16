@@ -1,6 +1,5 @@
 import { Sponsor } from '@/types/api'
 import { SlideComponentProps } from '@/types/slide'
-import Image from 'next/image'
 
 export function SponsorsSlide({ slide, data }: SlideComponentProps) {
   const sponsors = (data || []) as Sponsor[]
@@ -11,7 +10,7 @@ export function SponsorsSlide({ slide, data }: SlideComponentProps) {
         {sponsors.length > 0 ? (
           sponsors.map((sponsor) => (
             <div key={sponsor.name} className="shrink-0">
-              <Image
+              <img
                 src={sponsor.image_url}
                 className="object-contain"
                 alt={sponsor.name}

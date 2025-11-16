@@ -35,12 +35,15 @@ export interface Snapshot {
 
 export function slideConfigurations(snapshot: Snapshot): Partial<Slide>[] {
   const snapshotKey = snapshot.key
+  const processedTitle = snapshot.title.replace(/\b\d{4}\b/g, (match) => {
+    return match.split('').join(' ')
+  })
   return [
     {
       data: snapshot,
       disableScriptGeneration: true,
       id: 'intro-slide',
-      script: `Welcome to ${snapshot.title}`,
+      script: `Welcome to the ${processedTitle}.`,
       title: 'Welcome',
       type: 'intro',
     },

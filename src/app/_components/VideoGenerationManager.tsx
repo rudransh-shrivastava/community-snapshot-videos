@@ -28,6 +28,7 @@ export function VideoGenerationManager({
   const [slideIndexToRender, setSlideIndexToRender] = useState<number | null>(null)
 
   const [hasStarted, setHasStarted] = useState(false)
+  const currentTaskRef = useRef('')
 
   const startGeneration = async () => {
     setHasStarted(true)
@@ -37,7 +38,10 @@ export function VideoGenerationManager({
       console.log(message) // For debugging
     })
     ffmpeg.on('progress', ({ progress, time }) => {
-      setProgress(`Encoding... ${Math.round(progress * 100)}% (time: ${time / 1000}s)`)
+      const message = `${currentTaskRef.current} ${Math.round(progress * 100)}% (time: ${
+        time / 100000
+      }s)`
+      setProgress(message)
     })
 
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
@@ -48,36 +52,42 @@ export function VideoGenerationManager({
     setProgress('FFmpeg loaded.')
 
     const validSlides = slides.filter((slide) => scriptCache[slide.id] && audioUrlCache[slide.id])
+    setProgress(`Found ${validSlides.length} slides to generate.`)
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const videoSegments: string[] = []
 
     for (let i = 0; i < validSlides.length; i++) {
       const slide = validSlides[i]
-      setProgress(`Processing slide ${i + 1}/${validSlides.length}: ${slide.title}`)
+      const slideProgressPrefix = `[${i + 1}/${validSlides.length}]`
+      const imageName = `image_${i}.png`
+      const audioName = `audio_${i}.wav`
+      const segmentName = `slide_${i}.mp4`
 
-      // Render slide and capture image
+      setProgress(`${slideProgressPrefix} Rendering slide: ${slide.title}`)
       setSlideIndexToRender(slides.indexOf(slide))
-      await new Promise((resolve) => setTimeout(resolve, 100))
+      await new Promise((resolve) => setTimeout(resolve, 1000)) // Wait for render
       if (!slideRendererRef.current) continue
 
+      setProgress(`${slideProgressPrefix} Capturing slide image...`)
       const dataUrl = await slideRendererRef.current.capture()
       const imageBlob = await (await fetch(dataUrl)).blob()
-      await ffmpeg.writeFile('image.png', new Uint8Array(await imageBlob.arrayBuffer()))
+      await ffmpeg.writeFile(imageName, new Uint8Array(await imageBlob.arrayBuffer()))
 
-      // Get audio
+      setProgress(`${slideProgressPrefix} Preparing audio...`)
       const audioUrl = audioUrlCache[slide.id]
       if (!audioUrl) continue
       const audioData = await fetchFile(audioUrl)
-      await ffmpeg.writeFile('audio.wav', audioData)
+      await ffmpeg.writeFile(audioName, audioData)
 
-      // Create video segment
-      const segmentName = `slide_${i}.mp4`
+      currentTaskRef.current = `${slideProgressPrefix} Encoding video segment...`
       await ffmpeg.exec([
         '-loop',
         '1',
         '-i',
-        'image.png',
+        imageName,
         '-i',
-        'audio.wav',
+        audioName,
         '-c:v',
         'libx264',
         '-tune',
@@ -92,10 +102,11 @@ export function VideoGenerationManager({
         segmentName,
       ])
       videoSegments.push(segmentName)
+      await ffmpeg.deleteFile(imageName)
+      await ffmpeg.deleteFile(audioName)
     }
 
-    // Concatenate videos
-    setProgress('Combining video segments...')
+    currentTaskRef.current = 'Combining all video segments...'
     const concatFileContent = videoSegments.map((name) => `file '${name}'`).join('\n')
     await ffmpeg.writeFile('concat.txt', concatFileContent)
 
@@ -111,7 +122,6 @@ export function VideoGenerationManager({
       'output.mp4',
     ])
 
-    // Download final video
     setProgress('Finishing up...')
     const data = (await ffmpeg.readFile('output.mp4')) as Uint8Array
     const blob = new Blob([data.buffer as BlobPart], { type: 'video/mp4' })

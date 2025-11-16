@@ -1,6 +1,5 @@
 import { SlideComponentProps } from '@/types/slide'
 import { MapPin } from 'lucide-react'
-import Image from 'next/image'
 import WorldMap from '../../../public/worldmap.png'
 
 interface Chapter {
@@ -57,7 +56,7 @@ export function NewChaptersSlide({ data }: SlideComponentProps) {
               <span className="absolute top-full left-1/2 -translate-x-1/2 font-bold"></span>
             </div>
           ))}
-          <Image src={WorldMap} alt="Map of the world" />
+          <img src={WorldMap.src} alt="Map of the world" />
         </div>
         <div className="divide-y-2 text-xl">
           {newChapters

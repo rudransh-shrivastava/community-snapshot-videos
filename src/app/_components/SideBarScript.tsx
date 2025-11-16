@@ -113,7 +113,6 @@ export function SideBarScript({
 
     setProcessingSlide({ id: currentSlide.id, task: 'audio' })
     setError(null)
-    setAudioUrlCache((prev) => ({ ...prev, [currentSlide.id]: null }))
 
     try {
       const response = await fetch('/api/generate-audio', {
