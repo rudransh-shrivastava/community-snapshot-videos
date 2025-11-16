@@ -11,12 +11,13 @@ The hackathon project aims to generate YouTube videos to showcase a quick recap 
 ## Sample Video Generation
 
 We generated a video for [October 2025 OWASP Community Snapshot](https://nest.owasp.org/snapshots/2025-11)
-<img width="1574" height="996" alt="image" src="https://github.com/user-attachments/assets/461d3964-e9f4-4ae0-ab6e-0763254ded1c" />
 
-https://github.com/user-attachments/assets/6d2f774f-b0e6-4e6f-b7fe-b398804f1765
+https://github.com/user-attachments/assets/ada644b0-de9b-4908-bb5d-ed479f0c186b
+
 
 
 ## Key Features
+<img width="1574" height="996" alt="image" src="https://github.com/user-attachments/assets/461d3964-e9f4-4ae0-ab6e-0763254ded1c" />
 
 - Data fetching using [OWASP Nest API](https://github.com/owasp/nest)
 - Transcript and Audio generation using [Google Gemini](https://ai.google.dev/gemini-api/docs/)
