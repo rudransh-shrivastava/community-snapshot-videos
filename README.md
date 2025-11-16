@@ -3,6 +3,7 @@
 Every month, a new [Community Snapshot](https://nest.owasp.org/snapshots) is created.
 The hackathon project aims to generate YouTube videos to showcase a quick recap of "What's new".
 
+## [Demonstration Video (YouTube)](https://youtu.be/5VZmHh3boPY)
 ## Authors / Team Members
 
 - [Gopal Lohar](https://github.com/gopal-lohar) : [Email](mailto:gopal.lohar.dev@gmail.com)
@@ -11,6 +12,8 @@ The hackathon project aims to generate YouTube videos to showcase a quick recap 
 ## Sample Video Generation
 
 We generated a video for [October 2025 OWASP Community Snapshot](https://nest.owasp.org/snapshots/2025-11)
+
+[Alternative YouTube Video Link](https://youtu.be/V1J_2OnYoxA)
 
 https://github.com/user-attachments/assets/ada644b0-de9b-4908-bb5d-ed479f0c186b
 
@@ -84,7 +87,4 @@ make run
    - The slides marked as "done" will be rendered in a video!
 
 5. The video will be downloaded in the browser.
-
-### Known Bugs
-- Unable to generate audio in the first slide.
 
